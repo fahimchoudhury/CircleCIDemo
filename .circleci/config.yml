@@ -30,6 +30,9 @@ jobs:
           name: Build debug apk
           command: ./gradlew assembleDebug
       - run:
+          name: Build release apk
+          command: ./gradlew assembleRelease
+      - run:
           name: Run Tests
           command: ./gradlew lint test
       - store_artifacts:

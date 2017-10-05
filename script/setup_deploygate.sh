@@ -5,7 +5,7 @@ if [ "$CIRCLE_BRANCH" == "release" ]; then
   echo "Creating signed release apk..."
   ./gradlew assembleRelease
 
-  RELEASE_APK="app/build/outputs/apk/*release*.apk"
+  RELEASE_APK=$(find ./app/build/outputs/apk/ -name '*release*apk')
 
   if [ -f $RELEASE_APK ]; then
     echo "Release APK found"
