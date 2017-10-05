@@ -10,7 +10,7 @@ if [ "$CIRCLE_BRANCH" == "release" ]; then
   if [ -f $RELEASE_APK ]; then
     echo "Release APK found"
     echo "Uploading to Deploygate..."
-    curl -F "file=@$RELEASE_APK" -F "token=$ENV_DEPLOYGATE_API" -F "message=Testing CircleCI integration with Deploygate" https://deploygate.com/api/users/$ENV_DEPLOYGATE_USER/apps
+    curl -F "file=@$RELEASE_APK" -F "token=$ENV_DEPLOYGATE_API" -F "message=Version 2.0.0 released" https://deploygate.com/api/users/$ENV_DEPLOYGATE_USER/apps
   else
     echo "Release APK not found, aborting..."
   fi
