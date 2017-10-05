@@ -30,9 +30,6 @@ jobs:
           name: Build debug apk
           command: ./gradlew assembleDebug
       - run:
-          name: Build release apk
-          command: ./gradlew assembleRelease
-      - run:
           name: Run Tests
           command: ./gradlew lint test
       - store_artifacts:
@@ -40,3 +37,6 @@ jobs:
           destination: apk
       - store_test_results:
           path: app/build/test-results
+      - deploy:
+          name: Deploy to deploygate
+          command: source script/setup_deploygate.sh
