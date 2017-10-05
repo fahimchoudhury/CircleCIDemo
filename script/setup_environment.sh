@@ -2,25 +2,28 @@
 
 
 function decrypt_keystore {
+
 ENCRYPTED_KEYSTORE="keystore.enc"
 
-KEYSTORE_FILE="$CIRCLE_WORKING_DIRECTORY/circleci-demo-keystore.jks"
+KEYSTORE_FILE="circleci-demo-keystore.jks"
 
-echo "circleci-demo-keystore.jks should exist at $KEYSTORE_FILE"
+echo "$KEYSTORE_FILE should exist"
 
 if [ ! -f "$KEYSTORE_FILE" ]; then
   echo "$KEYSTORE_FILE doesn't exist"
   echo "Decrypting $ENCRYPTED_KEYSTORE to generate $KEYSTORE_FILE"
-  openssl aes-256-cbc -d -in $ENCRYPTED_KEYSTORE -out circleci-demo-keystore.jks -k $ENV_DECRYPT_KEY
+  openssl aes-256-cbc -d -in $ENCRYPTED_KEYSTORE -out $KEYSTORE_FILE -k $ENV_DECRYPT_KEY
 fi
 }
 
 function setup_signing_config {
-KEYSTORE_FILE="$CIRCLE_WORKING_DIRECTORY/circleci-demo-keystore.jks"
 
-KEYSTORE_PROPERTIES="$CIRCLE_WORKING_DIRECTORY/keystore.properties"
+KEYSTORE_FILE="circleci-demo-keystore.jks"
+KEYSTORE_FILE_PATH=$(pwd)"/$KEYSTORE_FILE"
 
-echo "keystore.properties should exist at $KEYSTORE_PROPERTIES"
+KEYSTORE_PROPERTIES="keystore.properties"
+
+echo "keystore.properties should exist"
 
 if [ ! -f "$KEYSTORE_PROPERTIES" ]; then
   echo "keystore.properties doesn't exist"
@@ -29,7 +32,8 @@ if [ ! -f "$KEYSTORE_PROPERTIES" ]; then
   touch keystore.properties
 
   echo "Writing signingConfigs for release builds to keystore.properties..."
-  echo "storeFile=$KEYSTORE_FILE" >> "$KEYSTORE_PROPERTIES"
+
+  echo "storeFile=$KEYSTORE_FILE_PATH" >> "$KEYSTORE_PROPERTIES"
   echo "storePassword=$ENV_STORE_PASSWORD" >> "$KEYSTORE_PROPERTIES"
   echo "keyAlias=$ENV_KEY_ALIAS" >> "$KEYSTORE_PROPERTIES"
   echo "keyPassword=$ENV_KEY_PASSWORD" >> "$KEYSTORE_PROPERTIES"
