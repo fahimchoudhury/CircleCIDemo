@@ -11,6 +11,12 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
+          name: Decrypt encrypted keystore file
+          command: source script/setup_environment.sh && decrypt_keystore
+      - run:
+          name: Set up signing configuration
+          command: source script/setup_environment.sh && setup_signing_config
+      - run:
           name: chmod permissions
           command: chmod +x ./gradlew
       - run:
@@ -21,8 +27,11 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Build APK [debug]
+          name: Build debug apk
           command: ./gradlew assembleDebug
+      - run:
+          name: Build release apk
+          command: ./gradlew assembleRelease
       - run:
           name: Run Tests
           command: ./gradlew lint test
